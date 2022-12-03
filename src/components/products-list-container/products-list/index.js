@@ -17,7 +17,7 @@ const ProductsList = () => {
           {key: 'Ice Cream',info:'lorem impus lorem is',price:3500},
           {key: 'Hamburger',info:'lorem impus lorem is lorem impus lorem is lorem impus lorem is',price:1500},
           {key: 'Cookies',info:'lorem impus lorem is',price:2500},
-          {key: 'French Fries',info:'lorem impus lorem is lorem impus lorem is',price:3000},         
+          {key: 'French Fries',info:'lorem impus lorem is lorem impus lorem is',price:3000},          
         ]}
         renderItem={({item}) => <ProductItem item={item}/>}
       />

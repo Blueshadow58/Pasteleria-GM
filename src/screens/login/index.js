@@ -20,7 +20,9 @@ export default function Login({navigation}) {
         style={styles.logo}
         source={require('../../../assets/cooking.png')}
       />
+      
         <DefaultLogin navigation={navigation} />
+
         <View style={styles.containerButton}>        
           <Text onPress={()=> navigation.navigate('Register')} style={styles.textRegister}>Crear Cuenta</Text>      
         </View>

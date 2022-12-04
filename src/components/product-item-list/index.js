@@ -1,32 +1,34 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import colors from '../../../constants/colors';
+import colors from '../../constants/colors';
+
 
 const styles = StyleSheet.create({
     item: {        
         flex:1,
         backgroundColor: '#ffffff',
-        padding: 20,
-        marginVertical: 8,
-        marginHorizontal: 16,
+        padding: 15,
+        marginVertical: 7,
+        marginHorizontal: 20,
         flexDirection:'row',
         borderRadius:25,
-        height:140
-    
+        height:120
+      },
+      containerInfo:{
+        alignItems:'center',
+        flexDirection:'column',
+        width:'50%'
       },
       containerImg:{        
         width:'50%',
         alignSelf:'center',
-        alignItems:'center',        
+        alignItems:'flex-end',        
         width:'50%'
-      },      
-      containerInfo:{
-        flexDirection:'column',
-        width:'50%'
-      },
+      },  
       img:{
-        width:110,
-        height:110
+        width:'80%',
+        height: '100%',
+        borderRadius:15
       },
       title: {
         backgroundColor:'#eee',
@@ -38,8 +40,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#aaa',
         fontSize: 14,        
         color:colors.brown,
-        paddingBottom:15,
-        height:50   
+        height:40,
       },
       price: {
         flex:1,
@@ -51,11 +52,9 @@ const styles = StyleSheet.create({
       }
 });
 
-const ProductItem = ({item}) => {
+const ProductItemList = ({item}) => {
   return (    
         <View style={styles.item}>            
-        
-            
             <View style={styles.containerInfo}> 
                 <Text style={styles.title} >{item.key}</Text>   
                 <Text style={styles.info} numberOfLines={2}  >{item.info}</Text>   
@@ -69,4 +68,4 @@ const ProductItem = ({item}) => {
   );
 }
 
-export default ProductItem;
+export default ProductItemList;

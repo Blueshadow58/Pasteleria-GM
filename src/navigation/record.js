@@ -1,19 +1,19 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import colors from "../constants/colors";
-import { Home } from "../screens";
+import {Record} from "../screens";
 const Stack = createNativeStackNavigator();
 
-function ShopNavigation() {
+function RecordNavigation() {
   return (
-    <Stack.Navigator initialRouteName="Home" screenOptions={{
+    <Stack.Navigator initialRouteName="Record" screenOptions={{
     headerStyle: {
       backgroundColor: colors.orange,
     },
     headerTintColor: colors.white,
     headerTitleAlign: "center",
     }}>
-      <Stack.Screen name="Home" component={Home} options={{
-        title:"Productos",
+      <Stack.Screen name="Record" component={Record} options={{
+        title:"Historial de compras",
       }} />
       {/* <Stack.Screen name="Product" component={Product} />
       <Stack.Screen name="Cart" component={Cart} />
@@ -22,4 +22,4 @@ function ShopNavigation() {
   );
 }
 
-export default ShopNavigation;
+export default RecordNavigation;

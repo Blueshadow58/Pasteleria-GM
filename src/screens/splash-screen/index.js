@@ -15,7 +15,7 @@ export default function SplashScreen({navigation}) {
                 navigation.navigate('Login')
             }
         })
-    }, 1000);
+    }, 500);
 
   return (
     <>

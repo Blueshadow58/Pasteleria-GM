@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
-
 const initialState = {
     user: false,
     token: null,
@@ -19,7 +17,6 @@ export const authentificationSlice = createSlice({
         }
     }
 })
-
 
 export const { changeToLogged,setToken } = authentificationSlice.actions;
 

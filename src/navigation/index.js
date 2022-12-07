@@ -7,59 +7,56 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import colors from "../constants/colors";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import RecordNavigation from "./record";
+import { View } from "react-native";
+import CartNavigation from "./cart";
 
 
 const Tab = createBottomTabNavigator();
 
 const styles ={
     headerShown: false,
-        tabBarInactiveBackgroundColor: colors.orange,
-        tabBarActiveBackgroundColor: colors.orange,
         tabBarActiveTintColor: colors.white,
         tabBarInactiveTintColor: colors.darkbrown,
         tabBarStyle: {
+            backgroundColor: colors.orange,
             height: 60,
-        }
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
+        },
+        tabBarLabelStyle: {
+            fontSize: 14,
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
+        },
+        tabBarLabelPosition: "beside-icon",
+        tabBarAllowFontScaling: true,
 }
 
 
 function TabNavigation() {
     return (
-      <Tab.Navigator screenOptions={{
-        headerShown: false,
-        tabBarInactiveBackgroundColor: colors.orange,
-        tabBarActiveBackgroundColor: colors.orange,
-        tabBarActiveTintColor: colors.white,
-        tabBarInactiveTintColor: colors.darkbrown,
-        tabBarStyle: {
-            height: 60,
-        },
-        tabBarLabelStyle: {
-            fontSize: 14,
-            // fontWeight: "bold",
-        },
-        tabBarLabelPosition: "beside-icon",
-        tabBarAllowFontScaling: true,
-      }}>
-        <Tab.Screen name="ProductsTab" component={ShopNavigation}  options={{
-            title:"Productos",
-            tabBarIcon: ({ color, size }) => (
-                <Ionicons name="home" color={color} size={size} />
-            )
-        }} />
-        <Tab.Screen name="CartTab" component={ShopNavigation} options={{
-            title:"Carrito",
-            tabBarIcon: ({ color, size }) => (
-                <Ionicons name="cart" color={color} size={size} />
-            )
-        }} />
-        <Tab.Screen name="RecordsTab" component={RecordNavigation} options={{
-            title:"Historial",
-            tabBarIcon: ({ color, size }) => (
-                <Ionicons name="list" color={color} size={size} />
-            )
-        }}/>
-      </Tab.Navigator>
+    <View style={{flex: 1,backgroundColor:colors.lightGray }}>
+        <Tab.Navigator screenOptions={styles}>
+            <Tab.Screen name="ProductsTab" component={ShopNavigation}  options={{
+                title:"Productos",
+                tabBarIcon: ({ color, size }) => (
+                    <Ionicons name="home" color={color} size={size} />
+                )
+            }} />
+            <Tab.Screen name="CartTab" component={CartNavigation} options={{
+                title:"Carrito",
+                tabBarIcon: ({ color, size }) => (
+                    <Ionicons name="cart" color={color} size={size} />
+                )
+            }} />
+            <Tab.Screen name="RecordsTab" component={RecordNavigation} options={{
+                title:"Historial",
+                tabBarIcon: ({ color, size }) => (
+                    <Ionicons name="list" color={color} size={size} />
+                )
+            }}/>
+        </Tab.Navigator>
+    </View>
     );
   }
 

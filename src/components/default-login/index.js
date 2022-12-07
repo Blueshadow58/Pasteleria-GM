@@ -23,7 +23,6 @@ export default function DefaultLogin({navigation}) {
     signInWithEmailAndPassword(firebaseAuth,email,password).then( (userCredential)=>{
       console.log('logiado');  
       //  Change state of the user to logged
-      
       dispatch(changeToLogged())  
     }).catch(error=> Alert.alert('Error al inicial sesion',error.message))
   }

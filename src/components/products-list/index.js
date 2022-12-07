@@ -1,5 +1,5 @@
 import React, { Children } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {    
@@ -7,17 +7,13 @@ const styles = StyleSheet.create({
   }
 });
 
-const ProductsList = ({Children}) => {
+const ProductsList = ({Children,products,numColumns}) => {
   return (       
     <View style={styles.container} >
-      <FlatList 
-        data={[
-          {key: 'Ice Cream',info:'lorem impus lorem is',price:3500},
-          {key: 'Hamburger',info:'lorem impus lorem is lorem impus lorem is lorem impus lorem is',price:1500},
-          {key: 'Cookies',info:'lorem impus lorem is',price:2500},
-          {key: 'French Fries',info:'lorem impus lorem is lorem impus lorem is',price:3000},          
-        ]}
-        renderItem={({item}) => <Children item={item} />}
+      <FlatList
+        numColumns={numColumns? numColumns: 1}
+        data={products}
+        renderItem={({item}) => <Children product={item} />}
       />
     </View>
   );

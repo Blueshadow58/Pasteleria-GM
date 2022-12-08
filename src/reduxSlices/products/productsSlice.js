@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     list: [],
-    loading: true,
+    loading: false,
     hasErrors: false,
 }
 
@@ -12,7 +12,7 @@ export const productsSlice = createSlice({
     reducers: {
         setProducts: (state,action) => {
             state.list = action.payload;
-            state.loading = !state.loading ;
+            state.loading = true;
         }
     }
 })

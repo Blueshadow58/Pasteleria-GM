@@ -3,13 +3,11 @@ import { db, defaultAuth } from "./firebase-config";
 
 // get item from firebase firestore
 export const getProducts = async () => {
-  
   const data = [];
   const productsCollection = collection(db, "products");
   const productsSnapshot = await getDocs(productsCollection);
   productsSnapshot.docs.map((doc) => data.push({id: doc.id, ...doc.data()}));
-  return data; 
-  
+  return data;
 }
 
 

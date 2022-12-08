@@ -1,25 +1,28 @@
 import { StatusBar } from 'expo-status-bar'
 import { Alert, Text, View } from 'react-native'
-import { ProductItemCard, ProductItemList, ProductsList } from '../../components'
+import { LoadingSpinner, ProductItemCard, ProductItemList, ProductsList } from '../../components'
 import { styles } from './styles'
 import { getProducts } from '../../firebase/api'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
 import { setProducts } from '../../reduxSlices/products/productsSlice'
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
+import { useSelector,useDispatch } from 'react-redux'
+
 
 const Home = () => {
   const dispatch = useDispatch();
   const list = useSelector(state => state.products.list);
+  const loading = useSelector(state => state.products.loading);
 
-  useEffect(() => {
-    getProducts().then((data) => dispatch(setProducts(data))); 
-  }, []);
-
+  useFocusEffect(
+    useCallback(() => {
+      getProducts().then((data) => dispatch(setProducts(data)));
+    }, [dispatch])
+  )
 
   return (
     <View style={styles.container}>
-      {list ? <ProductsList Children={ProductItemCard} numColumns={2} /> : null}  
+      {loading ? <ProductsList Children={ProductItemCard} products={list} numColumns={2} /> : <LoadingSpinner />}  
     </View>
   )
 }

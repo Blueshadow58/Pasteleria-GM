@@ -1,6 +1,5 @@
 import React, { Children } from 'react';
 import { Alert, FlatList, StyleSheet, Text, View } from 'react-native';
-import { useSelector } from 'react-redux';
 
 const styles = StyleSheet.create({
   container: {    
@@ -8,8 +7,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const ProductsList = ({Children,numColumns}) => {
-  const products = useSelector(state => state.products.list);
+const ProductsList = ({Children,products,numColumns}) => {
 
   return (       
     <View style={styles.container} >

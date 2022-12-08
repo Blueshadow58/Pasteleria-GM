@@ -19,7 +19,6 @@ const ProductItemCard = ({product}) => {
         <View style={styles.containerImg}>
           <Image  style={styles.img} source={{uri: 'https://reactjs.org/logo-og.png'}}></Image> 
         </View>
-       
         {/* Container of info and add to cart */}
         <View style={styles.bottomCard}>
           <View style={styles.info}>

@@ -1,6 +1,6 @@
 import { Text, View,Image } from 'react-native'
 import { useDispatch } from 'react-redux';
-import { setToken } from '../../features/authentification/authentificationSlice';
+import { setToken } from '../../reduxSlices/authentification/authentificationSlice';
 import { defaultAuth } from '../../firebase/firebase-config';
 import styles from './styles';
 

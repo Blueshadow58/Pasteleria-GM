@@ -45,6 +45,7 @@ function TabNavigation() {
             }} />
             <Tab.Screen name="CartTab" component={CartNavigation} options={{
                 title:"Carrito",
+                tabBarBadge: 3,
                 tabBarIcon: ({ color, size }) => (
                     <Ionicons name="cart" color={color} size={size} />
                 )

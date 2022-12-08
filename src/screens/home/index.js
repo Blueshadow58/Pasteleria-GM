@@ -4,22 +4,22 @@ import { ProductItemCard, ProductItemList, ProductsList } from '../../components
 import { styles } from './styles'
 import { getProducts } from '../../firebase/api'
 import { useEffect, useState } from 'react'
+import { setProducts } from '../../reduxSlices/products/productsSlice'
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 const Home = () => {
-const [products, setProducts] = useState(false)
+  const dispatch = useDispatch();
+  const list = useSelector(state => state.products.list);
 
   useEffect(() => {
-    getProducts()
-      .then((data) => {
-        setProducts(data);
-      })
-      .catch((err) => alert(err));
+    getProducts().then((data) => dispatch(setProducts(data))); 
   }, []);
 
 
   return (
     <View style={styles.container}>
-      {products ? <ProductsList Children={ProductItemCard} products={products} numColumns={2} /> : null}  
+      {list ? <ProductsList Children={ProductItemCard} numColumns={2} /> : null}  
     </View>
   )
 }

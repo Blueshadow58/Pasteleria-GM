@@ -4,12 +4,8 @@ import { styles } from './styles'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope'
-import { getAuth,signInWithEmailAndPassword,initializeAuth } from "firebase/auth/react-native";
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { firebaseConfig } from '../../firebase/firebase-config'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getReactNativePersistence } from 'firebase/auth/react-native';
-import { changeToLogged,getUser } from '../../features/authentification/authentificationSlice'
+import { signInWithEmailAndPassword } from "firebase/auth/react-native";
+import { changeToLogged } from '../../reduxSlices/authentification/authentificationSlice'
 import { useDispatch } from 'react-redux'
 import { firebaseAuth } from '../../firebase/firebase-config'
 
@@ -29,7 +25,6 @@ export default function DefaultLogin({navigation}) {
 
   return (
     <View style={styles.container}>     
-
       <View style={styles.inputContainer}>
         <FontAwesomeIcon icon={faEnvelope} style={styles.icon} />
         <TextInput
@@ -38,7 +33,6 @@ export default function DefaultLogin({navigation}) {
           placeholder="email@correo.com"
         />
       </View>
-
       <View style={styles.inputContainer}>
         <FontAwesomeIcon icon={faLock} style={styles.icon} />
         <TextInput
@@ -49,7 +43,6 @@ export default function DefaultLogin({navigation}) {
           secureTextEntry
         />
       </View>
-
       <View style={styles.containerButton}>
         <TouchableOpacity
           onPress={handleSignIn}
@@ -58,8 +51,6 @@ export default function DefaultLogin({navigation}) {
           <Text style={styles.textButtom}>Ingresar</Text>
         </TouchableOpacity>
       </View>
-      
-    
     </View>
   )
 }

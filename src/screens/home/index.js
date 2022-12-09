@@ -17,6 +17,7 @@ const Home = () => {
   useFocusEffect(
     useCallback(() => {
       getProducts().then((data) => dispatch(setProducts(data)));
+      
     }, [dispatch])
   )
 

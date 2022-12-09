@@ -12,7 +12,8 @@ const ProductsList = ({Children,products,numColumns}) => {
   return (       
     <View style={styles.container} >
       <FlatList
-        numColumns={numColumns? numColumns: 1}
+        keyExtractor={(item, index) => index.toString()}
+        numColumns={numColumns ? numColumns: 1}
         data={products}
         renderItem={({item}) => <Children product={item} />}
       />

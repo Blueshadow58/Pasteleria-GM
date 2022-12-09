@@ -1,37 +1,55 @@
 import { doc, onSnapshot } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
-import { Alert, KeyboardAvoidingView, Modal, Platform, Pressable, StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View } from 'react-native'
+import { useEffect, useState,useRef } from 'react';
+import { Alert, KeyboardAvoidingView, Modal,Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import { ProductItemList, ProductsList } from '../../components'
 import { getMyCart } from '../../firebase/api';
 import { db, defaultAuth } from '../../firebase/firebase-config'
 import { styles } from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useDispatch } from 'react-redux';
+import { setCart } from '../../reduxSlices/cart/cartSlice';
+import { useSelector } from 'react-redux';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 const Cart =({navigation}) => {
-const [cart, setCart] = useState([])
+// const [cart, setCart] = useState([])
 const [modalVisible, setModalVisible] = useState(false);
+const dispatch = useDispatch();
+const cart = useSelector(state => state.cart.list);
 
   useEffect(() => {
      onSnapshot(doc(db, "carts", defaultAuth.currentUser.uid), () => {
       getMyCart()
         .then((data) => {
-          setCart(data);
+          dispatch(setCart(data));           
         })
         .catch((err) => alert(err));
     });
-  }, []);
+  }, [dispatch]);
+  
+  
+  
   
   // Checkout Modal
-  const CheckoutModal = () => (
+  const CheckoutModal = () => {
+    const [phoneNumber, setPhoneNumber] = useState('');
+    
+    const handleCheckout = () => {
+      Alert.alert(phoneNumber);
+  };
+
+    return (
     <Modal
       animationType="slide"
       transparent={true}
       visible={modalVisible}
-      onRequestClose={() => {
+      onRequestClose={() => {        
         // Alert.alert("Modal has been closed.");
         setModalVisible(!modalVisible);
       }}
     >
-      <KeyboardAvoidingView style={styles.mainCountainer}>
+      
+
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.modalHeader}>
@@ -46,27 +64,34 @@ const [modalVisible, setModalVisible] = useState(false);
             <View style={styles.modalInnerView}>
               <View style={styles.formContainer}>
                 <Text style={styles.modalText}>Número telefónico</Text> 
-                <TextInput style={styles.inputForm} placeholder='Número telefónico'/>
+                <TextInput
+                autoFocus={true}
+                onChangeText={(text)=> setPhoneNumber(text)}
+                defaultValue={phoneNumber}
+                style={styles.inputForm} placeholder='Número telefónico'/>
                 <Text style={styles.modalText}>Direccción</Text> 
-                <TextInput style={styles.inputForm} placeholder='Numero telefonico'/>
+                <TextInput style={styles.inputForm} placeholder='Dirección'/>
                 <Text style={styles.modalText}>Instrucciones de entrega (opcional)</Text> 
-                <TextInput style={styles.inputForm} placeholder='Numero telefonico'/>                
+                <TextInput style={styles.inputForm} placeholder='Instrucciones de entrega'/>                
               </View>
               <View style={styles.btnConfirmOrder}>
-                <TouchableOpacity onPress={()=> alert('test')}  >
+                <TouchableOpacity onPress={()=> handleCheckout()}  >
                   <Text style={styles.checkoutText}>Confirmar Orden</Text>
                 </TouchableOpacity>
               </View>
             </View>       
           </View>
         </View>
-      </KeyboardAvoidingView>
+     
     </Modal>
-   
-  )
+    
+  )}
+
+
+
 
   return (
-    <>
+    <>    
       <View style={styles.container}>
           <View style={styles.productsListContainer}>
             {cart ? <ProductsList Children={ProductItemList} products={cart} numColumns={1} />:null}
@@ -76,8 +101,8 @@ const [modalVisible, setModalVisible] = useState(false);
               <Text style={styles.checkoutText}>Generar orden</Text>        
             </TouchableOpacity>
           </View>        
-        </View>
-      <CheckoutModal/>
+      </View>
+      <CheckoutModal/>       
       </>
   )
 }

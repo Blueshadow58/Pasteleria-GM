@@ -7,7 +7,6 @@ import styles from './styles';
 export default function SplashScreen({navigation}) {
     const dispatch = useDispatch()
 
-    setTimeout(() => {
         defaultAuth.onAuthStateChanged((user) => {
             if(user){
                 dispatch(setToken(user.email))
@@ -15,8 +14,6 @@ export default function SplashScreen({navigation}) {
                 navigation.navigate('Login')
             }
         })
-    }, 500);
-
   return (
     <>
         <View style={styles.container}>

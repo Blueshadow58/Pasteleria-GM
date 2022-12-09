@@ -1,23 +1,31 @@
 import { doc, onSnapshot } from 'firebase/firestore';
 import React, { useEffect } from 'react';
 import { Button, Image, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { addToCart } from '../../features/addToCart/addToCart';
+import { getCart } from '../../features/getCart';
 import { getStockCurrentProduct } from '../../features/getStockCurrentProduct';
+import { getTotalProducts } from '../../features/getTotalProducts';
 import { subtractFromCart } from '../../features/subtractFromCart';
 import { db, defaultAuth } from '../../firebase/firebase-config';
+import { setCantProducts } from '../../reduxSlices/cart/cartSlice';
 import { styles } from './styles';
+
 
 const ProductItemList = ({product}) => {
   const [stock, setStock] = React.useState(0);
+  const dispatch = useDispatch();
 
   useEffect(() => {
      onSnapshot(doc(db, "carts", defaultAuth.currentUser.uid), () => {
-      getStockCurrentProduct(product.id).then((stock) => {
+      getCart().then((cart) => {
+      getStockCurrentProduct(product.id,cart).then((stock) => {
         setStock(stock);
       });
+      
     });
+  });
   }, []);
-  
 
   return (    
         <View style={styles.product}>            

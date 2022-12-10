@@ -51,8 +51,10 @@ function TabNavigation() {
     }, []);
 
     return (
-    <View style={{flex: 1,backgroundColor:colors.lightGray }}>
-        <Tab.Navigator screenOptions={styles}>
+    <View style={{flex: 1,backgroundColor:colors.lightGray }} >
+        <Tab.Navigator screenOptions={styles} initialRouteName='ProductsTab'>
+            <Tab.Screen name="LoginTab" component={AuthNavigation} options={{
+                tabBarButton: () => null}}   />
             <Tab.Screen name="ProductsTab" component={ShopNavigation}  options={{
                 title:"Productos",
                 tabBarIcon: ({ color, size }) => (
@@ -81,7 +83,7 @@ const AppNavigator = () => {
     const token = useSelector(state => state.authentification.token);
     return (
         <NavigationContainer>
-        {token ? <TabNavigation/> : <AuthNavigation /> } 
+        {token ? <TabNavigation/> : <AuthNavigation/> } 
         </NavigationContainer>
     )
 }

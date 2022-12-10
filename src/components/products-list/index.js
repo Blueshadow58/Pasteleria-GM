@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
 });
 
 const ProductsList = ({Children,products,numColumns}) => {
-
   return (       
     <View style={styles.container} >
       <FlatList

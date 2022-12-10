@@ -10,9 +10,9 @@ export const addToCart = async (productId) => {
     const cartRef = doc(db,"carts",defaultAuth.currentUser.uid)
     const docSnap = await getDoc(cartRef);
     //update the quantity if the product is already in the cart
-    if (docSnap.data().products !== undefined) {
+   
+    if (docSnap.data() !== undefined) {
         const cart = docSnap.data();
-       
         const productIndex = cart.products.findIndex((product) => product.productId === productId);
         if (productIndex !== -1) {
             cart.products[productIndex].quantity += 1;

@@ -20,7 +20,7 @@ export default function DefaultLogin({navigation}) {
       console.log('logiado');  
       //  Change state of the user to logged
       dispatch(changeToLogged())  
-    }).catch(error=> Alert.alert('Error al inicial sesion',error.message))
+    }).catch(error=> Alert.alert('Error al inicial sesion','Compruebe su correo o contraseña'))
   }
 
   return (

@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { setCart } from '../../reduxSlices/cart/cartSlice';
 import { useSelector } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { createOrder } from '../../features/createOrder';
 
 const Cart =({navigation}) => {
 // const [cart, setCart] = useState([])
@@ -33,9 +34,18 @@ const cart = useSelector(state => state.cart.list);
   // Checkout Modal
   const CheckoutModal = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
-    
+    const [address, setAddress] = useState('');
+    const [instructions, setInstructions] = useState('');
+
+    const shippingInfo = {
+      phoneNumber: phoneNumber,
+      address: address,
+      instructions: instructions,
+    };
+
     const handleCheckout = () => {
-      Alert.alert(phoneNumber);
+      createOrder(cart,shippingInfo);
+      Alert.alert('Orden generada con éxito');
   };
 
     return (
@@ -70,9 +80,15 @@ const cart = useSelector(state => state.cart.list);
                 defaultValue={phoneNumber}
                 style={styles.inputForm} placeholder='Número telefónico'/>
                 <Text style={styles.modalText}>Direccción</Text> 
-                <TextInput style={styles.inputForm} placeholder='Dirección'/>
+                <TextInput
+                onChangeText={(text)=> setAddress(text)}
+                defaultValue={address}
+                style={styles.inputForm} placeholder='Dirección'/>
                 <Text style={styles.modalText}>Instrucciones de entrega (opcional)</Text> 
-                <TextInput style={styles.inputForm} placeholder='Instrucciones de entrega'/>                
+                <TextInput
+                onChangeText={(text)=> setInstructions(text)}
+                defaultValue={instructions}
+                style={styles.inputForm} placeholder='Instrucciones de entrega'/>                
               </View>
               <View style={styles.btnConfirmOrder}>
                 <TouchableOpacity onPress={()=> handleCheckout()}  >

@@ -35,13 +35,8 @@ export default function DefaultRegister({navigation}) {
   const handleCreateAccount = () => {
     if (password === confirmPassword) {
       createUserWithEmailAndPassword(auth,email,password).then((userCredential)=>{
-        console.log('la cuenta se creo');
-         const user = userCredential.user;
-         console.log(user)
-        navigation.navigate('Home')
       }).catch(error=> {
-        Alert.alert(error.message)
-        console.log(error)
+        Alert.alert('Error al registrar','Su contraseña debe contener al menos 6 caracteres')
       })  
     } else {
       Alert.alert('La contraseña no es igual')

@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { useDispatch } from "react-redux";
 import { db, defaultAuth } from "./firebase-config";
 
@@ -26,6 +26,17 @@ export const getMyCart = async () => {
   const productsData = productsSnapshot.docs.map((doc) => ({id: doc.id, ...doc.data()}));
   //filter products from array cart doc
   return productsData.filter(({id}) => data.includes(id));
+}
+
+
+export const getMyOrders = async () => {
+  const data = [];
+  //get data from collection orders firebase firestore
+  const ordersCollection = collection(db, "orders");
+  const ordersSnapshot = await getDocs(ordersCollection);
+  const ordersData = ordersSnapshot.docs.map((doc) => ({id: doc.id, ...doc.data()}));
+  return ordersData
+
 }
 
 

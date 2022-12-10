@@ -1,19 +1,20 @@
+import { db, defaultAuth } from "../../firebase/firebase-config";
+import { addDoc, collection } from "firebase/firestore";
 
 //create an order from the cart to the database firestore and clear the cart
-export const createOrder = (cart,shippingInfo) => {
-    const order = {
+export const createOrder = async (cart,shippingInfo) => {
+   
+    const docRef = await addDoc(collection(db, "orders"), 
+        {
         cart: cart,
         createAt: new Date(),
         status: "pendiente",
         userId: defaultAuth.currentUser.uid,
-        contactPhone: defaultAuth.currentUser.phoneNumber || shippingInfo.phone,
-        direction: shippingInfo.direction,
+        contactPhone: shippingInfo.phoneNumber || defaultAuth.currentUser.phoneNumber,
+        address: shippingInfo.address,
         instructions: shippingInfo.instructions,
-    };
-    db.collection("orders")
-        .add(order)
-        .then(() => {
-        clearCart();
-        })
-        .catch((err) => alert(err));
-    };
+        }
+      );
+
+    return docRef.id;
+}

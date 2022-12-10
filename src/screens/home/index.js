@@ -14,6 +14,7 @@ const Home = () => {
   const list = useSelector(state => state.products.list);
   const loading = useSelector(state => state.products.loading);
 
+  // make efficient this part to not load the same data each time
   useFocusEffect(
     useCallback(() => {
       getProducts().then((data) => dispatch(setProducts(data)));

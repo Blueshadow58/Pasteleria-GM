@@ -1,12 +1,12 @@
-import { Text, View,Image, TouchableOpacity, Button } from 'react-native'
-import { Camera, CameraType } from 'expo-camera';
+import { Text, View,Image, TouchableOpacity } from 'react-native'
 import { useState } from 'react';
 import * as ImagePicker from "expo-image-picker";
 import { styles } from './styles'
-import { db, defaultAuth, storage } from '../../firebase/firebase-config';
-import { getAuth, updateProfile } from "firebase/auth";
-import { getDownloadURL, getStorage, ref, uploadBytes, uploadBytesResumable, uploadString } from "firebase/storage";
+import { defaultAuth } from '../../firebase/firebase-config';
+import { updateProfile } from "firebase/auth";
+import { getStorage, ref} from "firebase/storage";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { uploadImageAsync } from '../../firebase/api';
 
 export default function Profile() {
   const currentUser = defaultAuth.currentUser;
@@ -15,7 +15,6 @@ export default function Profile() {
 
   const verifyPermissions = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
-
     if (status !== "granted") {
       Alert.alert("Permiso denegado", "Necesitamos permisos para usar la cámara", [{ text: "Ok" }]);
       return false;
@@ -39,7 +38,7 @@ export default function Profile() {
     const storage = getStorage();
     const storageRef = ref(storage, 'profilePictures');
     //upload the image to firebase storage
-    uploadImageAsync(storageRef,image.assets[0].uri).then((url) => {
+    uploadImageAsync(storageRef,image.assets[0].uri,currentUser.uid).then((url) => {
       //set the image url to the state
       setPickedUrl(url);
         //update the user profile
@@ -51,46 +50,23 @@ export default function Profile() {
     });
   };
 
+const Header = () => (
+  <View style={styles.headerContainer}>
+    <View style={styles.headerInner}>
+      {!pickedUrl ? <Image style={styles.img} />
+        : <Image style={styles.img} source={{ uri: pickedUrl }} />}
+        <TouchableOpacity style={styles.changeImg} onPress={onHandleTakeImage}>
+          <Ionicons style={styles.pencilIcon} name="pencil" />      
+        </TouchableOpacity>      
+      <Text>{currentUser.displayName ? currentUser.displayName: 'no name added'}</Text>          
+    </View> 
+  </View> 
+)
 
-
-  async function uploadImageAsync(storageRef,uri) {
-    const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        resolve(xhr.response);
-      };
-      xhr.onerror = function (e) {
-        console.log(e);
-        reject(new TypeError("Network request failed"));
-      };
-      xhr.responseType = "blob";
-      xhr.open("GET", uri, true);
-      xhr.send(null);
-    });
-    const fileRef = ref(storageRef, currentUser.uid + '_profilePicture');
-    const result = await uploadBytes(fileRef, blob);
-    // We're done with the blob, close and release it
-    blob.close();
-    return await getDownloadURL(fileRef);
-  }
-
-
-
-
-
-
+  // Render the profile screen 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <View style={styles.headerInner}>
-          {!pickedUrl ? <Image style={styles.img} />
-           : <Image style={styles.img} source={{ uri: pickedUrl }} />}
-          <TouchableOpacity style={styles.changeImg} onPress={onHandleTakeImage}>
-            <Ionicons style={styles.pencilIcon} name="pencil" />      
-          </TouchableOpacity>      
-          <Text>{currentUser.displayName ? currentUser.displayName: 'no name added'}</Text>          
-        </View> 
-      </View> 
+      <Header/>
     </View>
   )
   

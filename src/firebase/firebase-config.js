@@ -8,6 +8,7 @@ import { getAuth, getReactNativePersistence, initializeAuth } from "firebase/aut
 
 // Firebase import for web
  import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 
 
@@ -30,3 +31,6 @@ export const defaultAuth = initializeAuth(app, {
 
 // Initialize Cloud firestore Database 
 export const db = getFirestore(app);
+
+// Initialize Cloud Storage and get a reference to the service
+export const storage = getStorage(app);

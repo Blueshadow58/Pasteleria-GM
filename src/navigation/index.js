@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import colors from "../constants/colors";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import RecordNavigation from "./record";
+import ProfileNavigation from "./profile";
 import { View } from "react-native";
 import CartNavigation from "./cart";
 import { getTotalProducts } from "../features/getTotalProducts";
@@ -19,21 +20,23 @@ import { db, defaultAuth } from "../firebase/firebase-config";
 const Tab = createBottomTabNavigator();
 
 const styles ={
-    headerShown: false,
+    headerShown: false,    
         tabBarActiveTintColor: colors.white,
         tabBarInactiveTintColor: colors.darkbrown,
         tabBarStyle: {
+            
             backgroundColor: colors.orange,
             height: 60,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
         },
         tabBarLabelStyle: {
+            paddingBottom: 3,
             fontSize: 14,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
         },
-        tabBarLabelPosition: "beside-icon",
+        // tabBarLabelPosition: "beside-icon",
         tabBarAllowFontScaling: true,
 }
 
@@ -72,6 +75,12 @@ function TabNavigation() {
                 title:"Historial",
                 tabBarIcon: ({ color, size }) => (
                     <Ionicons name="list" color={color} size={size} />
+                )
+            }}/>
+            <Tab.Screen name="ProfileTab" component={ProfileNavigation} options={{
+                title:"Perfil",
+                tabBarIcon: ({ color, size }) => (
+                    <Ionicons name="person" color={color} size={size} />
                 )
             }}/>
         </Tab.Navigator>

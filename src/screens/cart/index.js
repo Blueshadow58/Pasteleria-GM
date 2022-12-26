@@ -22,6 +22,8 @@ const cart = useSelector(state => state.cart.list);
      onSnapshot(doc(db, "carts", defaultAuth.currentUser.uid), () => {
       getMyCart()
         .then((data) => {
+          
+          //validate if cart is empty
           dispatch(setCart(data));           
         })
         .catch((err) => alert(err));

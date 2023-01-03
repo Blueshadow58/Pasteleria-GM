@@ -1,4 +1,4 @@
-import { Text, View,Image, TouchableOpacity } from 'react-native'
+import { Text, View,Image, TouchableOpacity,Button } from 'react-native'
 import { useState } from 'react';
 import * as ImagePicker from "expo-image-picker";
 import { styles } from './styles'
@@ -7,8 +7,12 @@ import { updateProfile } from "firebase/auth";
 import { getStorage, ref} from "firebase/storage";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { uploadImageAsync } from '../../firebase/api';
+import { signOutFromActualAccout } from '../../firebase/auth';
+import {useDispatch} from 'react-redux';
+import { setToken } from '../../reduxSlices/authentification/authentificationSlice';
 
-export default function Profile() {
+export default function Profile({navigation}) {
+  const dispatch = useDispatch()
   const currentUser = defaultAuth.currentUser;
   let profileImg = currentUser.photoURL || null;
   const [pickedUrl, setPickedUrl] = useState(profileImg);
@@ -50,6 +54,8 @@ export default function Profile() {
     });
   };
 
+
+
 const Header = () => (
   <View style={styles.headerContainer}>
     <View style={styles.headerInner}>
@@ -63,10 +69,22 @@ const Header = () => (
   </View> 
 )
 
+
+
+
   // Render the profile screen 
   return (
     <View style={styles.container}>
       <Header/>
+        <Button title='Cerrar sesion' onPress={() => {
+          // dispatch(setToken(null))
+          
+          signOutFromActualAccout({navigation})
+          //redirect to login screen form this tab to avoid the user to go back to the profile screen
+          // navigation.navigate('LoginTab',{screen:'Login'}); 
+
+
+        }}/>
     </View>
   )
   

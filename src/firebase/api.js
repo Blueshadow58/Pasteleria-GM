@@ -1,6 +1,7 @@
 import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useDispatch } from "react-redux";
+import { fetchCart } from "../db";
 import { db, defaultAuth } from "./firebase-config";
 
 // get item from firebase firestore
@@ -15,22 +16,12 @@ export const getProducts = async () => {
 // get ids from array cart doc
 export const getMyCart = async () => {
     const data = [];
-    //get ids from array cart doc
-    const myCartDoc = doc(db, "carts", defaultAuth.currentUser.uid);
-    const myCartSnapshot = await getDoc(myCartDoc).then((doc) => {
-      if (doc.exists()) {
-        return doc.data();
-      }else {
-        return [];
-      }
-    });
-    const myCartData = myCartSnapshot.products;
-
+    //get data from sqlite
+    const fetchData = await fetchCart();
     // validate if cart is empty
-    if (myCartData === undefined) {
-      return [];
-    }  
-    myCartData.map(({productId}) => data.push(productId));
+    const myCartData = fetchData.rows._array === undefined ? [] : fetchData;    
+        
+    myCartData.rows._array.map(({productId}) => data.push(productId));
     //get products from array cart doc
     const productsCollection = collection(db, "products");
     const productsSnapshot = await getDocs(productsCollection);

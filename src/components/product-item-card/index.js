@@ -3,7 +3,7 @@ import { View,Text, Image, Alert, TouchableOpacity } from 'react-native'
 import colors from '../../constants/colors'
 import { styles } from './styles'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { addToCart } from '../../features/addToCart/addToCart';
+import { editMyCartStock } from '../../features/addToCart/addToCart';
 
 
 const ProductItemCard = ({product}) => {
@@ -27,7 +27,7 @@ const ProductItemCard = ({product}) => {
           </View>
           <View style={styles.addToCart}>
             {/* add product to the cart of the actual user */}
-            <TouchableOpacity onPress={()=> addToCart(product.id)}>
+            <TouchableOpacity onPress={()=> editMyCartStock(product.id,'+')}>
               <Ionicons style={styles.addIcon} name="add-circle" />
             </TouchableOpacity>
             

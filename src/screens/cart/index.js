@@ -11,6 +11,7 @@ import { setCart } from '../../reduxSlices/cart/cartSlice';
 import { useSelector } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { createOrder } from '../../features/createOrder';
+import { fetchCart } from '../../db';
 
 const Cart =({navigation}) => {
 // const [cart, setCart] = useState([])
@@ -19,15 +20,12 @@ const dispatch = useDispatch();
 const cart = useSelector(state => state.cart.list);
 
   useEffect(() => {
-     onSnapshot(doc(db, "carts", defaultAuth.currentUser.uid), () => {
       getMyCart()
-        .then((data) => {
-          
+        .then((data) => {                    
           //validate if cart is empty
           dispatch(setCart(data));           
         })
         .catch((err) => alert(err));
-    });
   }, [dispatch]);
   
   

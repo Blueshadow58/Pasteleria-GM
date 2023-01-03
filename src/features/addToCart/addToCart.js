@@ -1,35 +1,39 @@
 import { doc, setDoc, setDocs, addDoc, increment, getDoc, updateDoc, arrayUnion } from "firebase/firestore"; 
 import { Alert } from "react-native";
+import { deleteProductFromCart, fetchCart, fetchCartById, insertProductToCart, updateProductQuantity } from "../../db";
 import { db, defaultAuth } from "../../firebase/firebase-config";
 
-export const addToCart = async (productId) => {
-    const productToAdd = {
-        productId: productId,
-        quantity: 1,
-    }
-    const cartRef = doc(db,"carts",defaultAuth.currentUser.uid)
-    const docSnap = await getDoc(cartRef);
-    //update the quantity if the product is already in the cart
-   
-    if (docSnap.data() !== undefined) {
-        const cart = docSnap.data();
-        const productIndex = cart.products.findIndex((product) => product.productId === productId);
-        if (productIndex !== -1) {
-            cart.products[productIndex].quantity += 1;
-            await updateDoc(cartRef, {
-                products: cart.products,
-            });
+export const editMyCartStock = async (productId,addOrSubstract) => {
+    
+    try {
+        let response = await fetchCartById(productId)
+        let productExists = response.rows._array.length > 0;
+        
+        
+        if (productExists) {
+            let quantity = response.rows._array[0].quantity ? response.rows._array[0].quantity : 0;    
+            // if the stock will be 0, delete the product from the cart
+            if (addOrSubstract === '-') {                
+                    
+                if (quantity === 0) {
+                    await deleteProductFromCart(productId)
+                    return
+                }
+                await updateProductQuantity(productId, addOrSubstract)
+                // console.log('quantity'+productId+' '+quantity)
+                return
+            }
+
+            await updateProductQuantity(productId, addOrSubstract)
+            
         } else {
-            await updateDoc(cartRef, {
-                products: arrayUnion(productToAdd),
-            });
+            await insertProductToCart(productId, 1)
         }
-    } else {
-        //set the cart if it doesn't exist
-        await setDoc(cartRef, {
-            products: [productToAdd],
-        });
+        
+    } catch (error) {
+        console.log('addToCart'+error)
     }
 
+   
 }
 

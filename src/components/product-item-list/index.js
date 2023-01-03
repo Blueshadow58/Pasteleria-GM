@@ -2,30 +2,67 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import React, { useEffect } from 'react';
 import { Button, Image, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { addToCart } from '../../features/addToCart/addToCart';
+import { fetchCart, fetchCartById } from '../../db';
+import { editMyCartStock } from '../../features/addToCart/addToCart';
 import { getCart } from '../../features/getCart';
 import { getStockCurrentProduct } from '../../features/getStockCurrentProduct';
 import { getTotalProducts } from '../../features/getTotalProducts';
-import { subtractFromCart } from '../../features/subtractFromCart';
 import { db, defaultAuth } from '../../firebase/firebase-config';
 import { setCantProducts } from '../../reduxSlices/cart/cartSlice';
 import { styles } from './styles';
-
+import { useSelector } from 'react-redux';
 
 const ProductItemList = ({product}) => {
   const [stock, setStock] = React.useState(0);
+  const [reRender, setReRender] = React.useState(false);
   const dispatch = useDispatch();
+  // const productStock = useSelector(state => state.cart.list);
 
+  // console.log(productStock);
   useEffect(() => {
-     onSnapshot(doc(db, "carts", defaultAuth.currentUser.uid), () => {
-      getCart().then((cart) => {
-      getStockCurrentProduct(product.id,cart).then((stock) => {
-        setStock(stock);
-      });
+    // alert(product.id );
+   
+
+    fetchCartById(product.id).then((response) => {
+      // verify if the product exists in the cart if not, set the stock to 0
+      let stock = JSON.stringify(response.rows._array[0].quantity) === undefined ? 0 : response.rows._array[0].quantity;
+
+      // let stock = response.rows._array.stock;
+      setStock(stock);
+
       
-    });
-  });
-  }, []);
+      
+      // after set the stock, re-render the component      
+    }).catch((error) => {
+      console.log('productItemList'+error);
+    });    
+
+
+  }, [reRender]);
+
+
+  const addProductToCart = async () => {   
+
+      try {
+        await editMyCartStock(product.id,'+'); 
+        await setReRender(!reRender);           
+      } catch (error) {
+        alert(error);
+      }
+    
+  }
+  const substractProductFromCart = async () => {
+    try {
+      
+      
+      await editMyCartStock(product.id,'-');
+      
+      await setReRender(!reRender);   
+    } catch (error) {
+      alert(error);
+    }
+    
+  }
 
   return (    
         <View style={styles.product}>            
@@ -39,11 +76,11 @@ const ProductItemList = ({product}) => {
           </View>   
              
           <View style={styles.stock}>
-            <TouchableOpacity  title="+" onPress={()=> addToCart(product.id)}>
+            <TouchableOpacity  title="+" onPress={addProductToCart}>
               <Text style={styles.plusBtnText}>+</Text>
             </TouchableOpacity>
             <Text style={styles.stockText}>{stock}</Text>
-            <TouchableOpacity title="-" onPress={() => subtractFromCart(product.id)}>
+            <TouchableOpacity title="-" onPress={substractProductFromCart}>
               <Text style={styles.minusBtnText}>-</Text>
             </TouchableOpacity>            
           </View>

@@ -15,7 +15,7 @@ export const cartSlice = createSlice({
         },
         setCantProducts: (state,action) => {
             state.totalProducts = action.payload;
-        }
+        }       
     }
 })
 

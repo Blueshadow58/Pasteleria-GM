@@ -15,31 +15,11 @@ import { setCantProducts } from "../reduxSlices/cart/cartSlice";
 import { useDispatch } from "react-redux";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db, defaultAuth } from "../firebase/firebase-config";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
 const Tab = createBottomTabNavigator();
-
-const styles ={
-    headerShown: false,    
-        tabBarActiveTintColor: colors.white,
-        tabBarInactiveTintColor: colors.darkbrown,
-        tabBarStyle: {
-            
-            backgroundColor: colors.orange,
-            height: 60,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-        },
-        tabBarLabelStyle: {
-            paddingBottom: 3,
-            fontSize: 14,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-        },
-        // tabBarLabelPosition: "beside-icon",
-        tabBarAllowFontScaling: true,
-}
-
+const Stack = createNativeStackNavigator();
 
 function TabNavigation() {
     const cantInCart = useSelector(state => state.cart.totalProducts);
@@ -56,7 +36,7 @@ function TabNavigation() {
     return (
     <View style={{flex: 1,backgroundColor:colors.lightGray }} >
         <Tab.Navigator screenOptions={styles} initialRouteName='ProductsTab'>
-            <Tab.Screen name="LoginTab" component={AuthNavigation} options={{
+            <Stack.Screen name="LoginTab" component={AuthNavigation} options={{
                 tabBarButton: () => null}}   />
             <Tab.Screen name="ProductsTab" component={ShopNavigation}  options={{
                 title:"Productos",
@@ -87,6 +67,7 @@ function TabNavigation() {
     </View>
     );
   }
+  
 
 const AppNavigator = () => {
     const token = useSelector(state => state.authentification.token);
@@ -95,6 +76,27 @@ const AppNavigator = () => {
         {token ? <TabNavigation/> : <AuthNavigation/> } 
         </NavigationContainer>
     )
+}
+
+const styles ={
+    headerShown: false,    
+        tabBarActiveTintColor: colors.white,
+        tabBarInactiveTintColor: colors.darkbrown,
+        tabBarStyle: {
+            
+            backgroundColor: colors.orange,
+            height: 60,
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
+        },
+        tabBarLabelStyle: {
+            paddingBottom: 3,
+            fontSize: 14,
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
+        },
+        // tabBarLabelPosition: "beside-icon",
+        tabBarAllowFontScaling: true,
 }
 
 export default AppNavigator

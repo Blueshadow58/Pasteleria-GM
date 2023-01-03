@@ -7,7 +7,7 @@ import { faEnvelope } from '@fortawesome/free-solid-svg-icons/faEnvelope'
 import { signInWithEmailAndPassword } from "firebase/auth/react-native";
 import { changeToLogged } from '../../reduxSlices/authentification/authentificationSlice'
 import { useDispatch } from 'react-redux'
-import { firebaseAuth } from '../../firebase/firebase-config'
+import { defaultAuth } from '../../firebase/firebase-config'
 
 export default function DefaultLogin({navigation}) {
   const [email, setEmail] = useState('')
@@ -15,12 +15,18 @@ export default function DefaultLogin({navigation}) {
   const dispatch = useDispatch()
  
   // Sign in with email and password
-  const handleSignIn = () => {
-    signInWithEmailAndPassword(firebaseAuth,email,password).then( (userCredential)=>{
+  const handleSignIn = () => {  
+    
+
+    signInWithEmailAndPassword(defaultAuth,email,password).then( (userCredential)=>{
+      console.log(userCredential.user);
       console.log('logiado');  
       //  Change state of the user to logged
       dispatch(changeToLogged())  
-    }).catch(error=> Alert.alert('Error al inicial sesion','Compruebe su correo o contraseña'))
+    }).catch(error=> {
+      console.log(error);      
+      Alert.alert('Error al inicial sesion','Compruebe su correo o contraseña')
+    })
   }
 
   return (

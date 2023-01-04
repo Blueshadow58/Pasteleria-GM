@@ -1,5 +1,5 @@
 import { doc, onSnapshot } from 'firebase/firestore';
-import React, { useEffect } from 'react';
+import React, { useEffect,useCallback } from 'react';
 import { Button, Image, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { fetchCart, fetchCartById } from '../../db';
@@ -11,6 +11,7 @@ import { db, defaultAuth } from '../../firebase/firebase-config';
 import { setCantProducts, setCart } from '../../reduxSlices/cart/cartSlice';
 import { styles } from './styles';
 import { useSelector } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native'
 
 const ProductItemList = ({product}) => {
   const [stock, setStock] = React.useState(0);
@@ -20,81 +21,37 @@ const ProductItemList = ({product}) => {
   const cart = useSelector(state => state.cart.list);
 
   // console.log(productStock);
-  useEffect(()  =>  {
-    // alert(product.id );
-    
-
-    fetchCartById(product.id,cart).then((response) => {
-     let stock = response.rows._array[0].quantity
-       setStock(stock);      
-    }).catch((error) => {
-      setStock(0);
-      // setReRender(!reRender);
-      //make re render to update the stock
-      ;
-    })
-    //
-// console.log(cart);
-    
-
-    //getproduct from the cart uselector and set the stock to the product by id
-    // const getProduct = (productId) => {
-    //   const productIndex = cart.products.findIndex((product) => product.productId === productId);
-    //   if (productIndex !== -1) {
-    //     setStock(cart.products[productIndex].quantity);
-    //   } else {
-    //     setStock(0);
-    //   }
-    // }
+  // useEffect(()  =>  {
    
-    // const getProduct = async (productId) => {
-    //   try {
-    //       let response = await fetchCartById(productId);
-    //       let stock = response.rows._array[0].quantity ? response.rows._array[0].quantity : 0;
-    //       setStock(stock);
-    //     } catch (error) {
-    //       // delete prduct with stock 0 on dispatch
-          
+  //   fetchCartById(product.id,cart).then((response) => {
+  //    let stock = response.rows._array[0].quantity
+  //      setStock(stock);      
+  //   }).catch((error) => {
+  //     setStock(0);
+  //     // setReRender(!reRender);
+  //     //make re render to update the stock
+  //     ;
+  //   })
+  //   //
+  // }, [reRender]);
 
 
-    //       setStock(0);
-    //     }
-    // }
+  useFocusEffect(          
+       useCallback(() => {         
+        fetchCartById(product.id,cart).then((response) => {
+          let stock = response.rows._array[0].quantity
+            setStock(stock);      
+            console.log('test only on focus');
+         }).catch((error) => {
+           setStock(0);           
+         })  
+       },
 
-    // getProduct(product.id);
-
-    // const productIndex = getProduct(product.id);
-    // if (productIndex !== undefined) {
-    //   setStock(productIndex.quantity);
-    // } else {
-    //   setStock(0);
-    // }
-
-
-    // try {
-    //   let response = await fetchCartById(product.id);
-    //   let stock = response.rows._array[0].quantity ? response.rows._array[0].quantity : 0;
-    //   setStock(stock);
-    // } catch (error) {
-    //   setStock(0);
-    // }
-
-    // fetchCartById(product.id).then((response) => {
-    //   // verify if the product exists in the cart if not, set the stock to 0
-    //   let stock = JSON.stringify(response.rows._array[0].quantity) === undefined ? 0 : response.rows._array[0].quantity;
-    //   // let stock = response.rows._array.stock;
-    //   setStock(stock);
-    //   // console.log(productStock);      
-    //   // after set the stock, re-render the component      
-    // }).catch((error) => {
-    //   setStock(0);
-    //   setReRender(!reRender);
-    //   // return ;
-    //    console.log('productItemList'+error);
-    // });    
+     [reRender])
+  )
+  
 
 
-  }, [reRender]);
 
 
   const addProductToCart = async () => {   

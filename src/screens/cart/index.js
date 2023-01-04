@@ -21,8 +21,8 @@ const cart = useSelector(state => state.cart.list);
 
   useEffect(() => {
       getMyCart()
-        .then((data) => {                    
-          //validate if cart is empty
+        .then((data) => {                            
+          
           dispatch(setCart(data));           
         })
         .catch((err) => alert(err));

@@ -7,6 +7,8 @@ import { editMyCartStock } from '../../features/addToCart/addToCart';
 
 
 const ProductItemCard = ({product}) => {
+
+ 
   return (
     // Card
       <View style={styles.card}>
@@ -27,7 +29,7 @@ const ProductItemCard = ({product}) => {
           </View>
           <View style={styles.addToCart}>
             {/* add product to the cart of the actual user */}
-            <TouchableOpacity onPress={()=> editMyCartStock(product.id,'+')}>
+            <TouchableOpacity onPress={()=>  editMyCartStock(product.id,'+')}>
               <Ionicons style={styles.addIcon} name="add-circle" />
             </TouchableOpacity>
             

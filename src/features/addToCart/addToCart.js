@@ -7,7 +7,7 @@ export const editMyCartStock = async (productId,addOrSubstract) => {
     
     try {
         let response = await fetchCartById(productId)
-        let productExists = response.rows._array.length > 0;
+        let productExists = response.rows._array.length > 0 ? true : false;
         
         
         if (productExists) {
@@ -15,8 +15,8 @@ export const editMyCartStock = async (productId,addOrSubstract) => {
             // if the stock will be 0, delete the product from the cart
             if (addOrSubstract === '-') {                
                     
-                if (quantity === 0) {
-                    await deleteProductFromCart(productId)
+                if (quantity === 1) {
+                     deleteProductFromCart(productId)
                     return
                 }
                 await updateProductQuantity(productId, addOrSubstract)

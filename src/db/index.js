@@ -102,7 +102,7 @@ export const deleteProductFromCart = (productId) => {
             'DELETE FROM cart WHERE productId = ?;',
             [productId],
             (_, result) => {
-            resolve(result);
+            resolve(result);            
             },
             (_, err) => {
             reject(err);

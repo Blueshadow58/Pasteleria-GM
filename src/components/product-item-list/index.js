@@ -20,35 +20,19 @@ const ProductItemList = ({product}) => {
   const productStock = useSelector(state => state.cart.list);
   const cart = useSelector(state => state.cart.list);
 
-  // console.log(productStock);
-  // useEffect(()  =>  {
-   
-  //   fetchCartById(product.id,cart).then((response) => {
-  //    let stock = response.rows._array[0].quantity
-  //      setStock(stock);      
-  //   }).catch((error) => {
-  //     setStock(0);
-  //     // setReRender(!reRender);
-  //     //make re render to update the stock
-  //     ;
-  //   })
-  //   //
-  // }, [reRender]);
+  
 
-
-  useFocusEffect(          
-       useCallback(() => {         
+  useEffect( () => {       
         fetchCartById(product.id,cart).then((response) => {
           let stock = response.rows._array[0].quantity
-            setStock(stock);      
-            console.log('test only on focus');
+            setStock(stock);                  
          }).catch((error) => {
            setStock(0);           
          })  
        },
 
      [reRender])
-  )
+  
   
 
 
@@ -74,7 +58,8 @@ const ProductItemList = ({product}) => {
         dispatch( setCart(cartFiltered) );
       }   
       // substract 1 to the stock but if the stock is 0 then delete the product from the database
-      await editMyCartStock(product.id,'-');           
+      await editMyCartStock(product.id,'-'); 
+      await setReRender(!reRender);      
     } catch (error) {
       alert(error);
     }

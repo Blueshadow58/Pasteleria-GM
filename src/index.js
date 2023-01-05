@@ -14,11 +14,11 @@ init().then(() => {
 
 
 
-fetchCart().then(result => {
-  console.log(result.rows._array);
-}).catch(err => {
-  console.log(err);
-});
+// fetchCart().then(result => {
+//   console.log(result.rows._array);
+// }).catch(err => {
+//   console.log(err);
+// });
 
 
 export default function App() {

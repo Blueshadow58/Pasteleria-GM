@@ -9,6 +9,7 @@ export const editMyCartStock = async (productId,addOrSubstract) => {
         let response = await fetchCartById(productId)
         let productExists = response.rows._array.length > 0 ? true : false;
         
+        // console.log('productExists'+productExists)
         
         if (productExists) {
             let quantity = response.rows._array[0].quantity ? response.rows._array[0].quantity : 0;    
@@ -19,9 +20,9 @@ export const editMyCartStock = async (productId,addOrSubstract) => {
                      deleteProductFromCart(productId)
                     return
                 }
-                await updateProductQuantity(productId, addOrSubstract)
+                // await updateProductQuantity(productId, addOrSubstract)
                 // console.log('quantity'+productId+' '+quantity)
-                return
+                // return
             }
 
             await updateProductQuantity(productId, addOrSubstract)

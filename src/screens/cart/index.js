@@ -1,5 +1,5 @@
 import { doc, onSnapshot } from 'firebase/firestore';
-import { useEffect, useState,useRef } from 'react';
+import { useEffect, useState,useRef,useCallback } from 'react';
 import { Alert, KeyboardAvoidingView, Modal,Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import { ProductItemList, ProductsList } from '../../components'
 import { getMyCart } from '../../firebase/api';
@@ -12,24 +12,29 @@ import { useSelector } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { createOrder } from '../../features/createOrder';
 import { fetchCart } from '../../db';
-
+import { useFocusEffect } from '@react-navigation/native'
 const Cart =({navigation}) => {
 // const [cart, setCart] = useState([])
 const [modalVisible, setModalVisible] = useState(false);
 const dispatch = useDispatch();
 const cart = useSelector(state => state.cart.list);
 
-  useEffect(() => {
-      getMyCart()
-        .then((data) => {                            
-          
-          dispatch(setCart(data));           
-        })
-        .catch((err) => alert(err));
-  }, [dispatch]);
+  // useEffect(() => {
+  //     getMyCart()
+  //       .then((data) => dispatch(setCart(data)))
+  //       .catch((err) => alert(err))
+  // }, [dispatch]);
   
   
-  
+  useFocusEffect(
+    useCallback(() => {
+      getMyCart().then((data) => dispatch(setCart(data)));
+      return () => {
+        dispatch(setCart([]));
+      }
+      
+    }, [dispatch])
+  )
   
   // Checkout Modal
   const CheckoutModal = () => {

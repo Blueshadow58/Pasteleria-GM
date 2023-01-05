@@ -15,6 +15,8 @@ export const getProducts = async () => {
 
 // get ids from array cart doc
 export const getMyCart = async () => {
+
+  try {
     const data = [];
     //get data from sqlite
     const fetchData = await fetchCart();
@@ -28,6 +30,11 @@ export const getMyCart = async () => {
     const productsData = productsSnapshot.docs.map((doc) => ({id: doc.id, ...doc.data()}));
     //filter products from array cart doc
     return productsData.filter(({id}) => data.includes(id));
+  } catch (error) {
+    console.log(error);
+  }
+  
+   
     
 }
 

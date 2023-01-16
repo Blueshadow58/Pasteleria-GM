@@ -1,6 +1,6 @@
 import { doc, onSnapshot } from 'firebase/firestore';
-import { useEffect, useState,useRef,useCallback } from 'react';
-import { Alert, KeyboardAvoidingView, Modal,Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { Alert, KeyboardAvoidingView, Modal, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import { ProductItemList, ProductsList } from '../../components'
 import { getMyCart } from '../../firebase/api';
 import { db, defaultAuth } from '../../firebase/firebase-config'
@@ -13,34 +13,49 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { createOrder } from '../../features/createOrder';
 import { fetchCart } from '../../db';
 import { useFocusEffect } from '@react-navigation/native'
-const Cart =({navigation}) => {
-// const [cart, setCart] = useState([])
-const [modalVisible, setModalVisible] = useState(false);
-const dispatch = useDispatch();
-const cart = useSelector(state => state.cart.list);
+import { fetchShippingInfo } from '../../db';
+
+const Cart = ({ navigation }) => {
+  // const [cart, setCart] = useState([])
+  const [modalVisible, setModalVisible] = useState(false);
+  const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart.list);
 
   // useEffect(() => {
   //     getMyCart()
   //       .then((data) => dispatch(setCart(data)))
   //       .catch((err) => alert(err))
   // }, [dispatch]);
-  
-  
+
+  //load shipping info into state on load
+
   useFocusEffect(
     useCallback(() => {
       getMyCart().then((data) => dispatch(setCart(data)));
       return () => {
         dispatch(setCart([]));
       }
-      
+
     }, [dispatch])
   )
-  
+
   // Checkout Modal
   const CheckoutModal = () => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [address, setAddress] = useState('');
     const [instructions, setInstructions] = useState('');
+
+    useEffect(() => {
+      fetchShippingInfo().then((data) => {
+        if (data.rows._array.length > 0) {
+          data = data.rows._array[0];
+          setPhoneNumber(data.phoneNumber);
+          setAddress(data.address);
+          setInstructions(data.instructions);
+        }
+      })
+    }, [])
+
 
     const shippingInfo = {
       phoneNumber: phoneNumber,
@@ -49,82 +64,83 @@ const cart = useSelector(state => state.cart.list);
     };
 
     const handleCheckout = () => {
-      createOrder(cart,shippingInfo);
+      createOrder(cart, shippingInfo);
       Alert.alert('Orden generada con éxito');
-  };
+    };
 
     return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalVisible}
-      onRequestClose={() => {        
-        // Alert.alert("Modal has been closed.");
-        setModalVisible(!modalVisible);
-      }}
-    >
-      
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          // Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+
 
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.modalHeader}>
-              <Text style={styles.textHeaderModal}>Datos de entrega</Text>   
+              <Text style={styles.textHeaderModal}>Datos de entrega</Text>
               <TouchableOpacity
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => setModalVisible(!modalVisible)}
-              >                              
-                  <Ionicons style={styles.closeIcon} name="close" />      
+              >
+                <Ionicons style={styles.closeIcon} name="close" />
               </TouchableOpacity>
             </View>
             <View style={styles.modalInnerView}>
               <View style={styles.formContainer}>
-                <Text style={styles.modalText}>Número telefónico</Text> 
+                <Text style={styles.modalText}>Número telefónico</Text>
                 <TextInput
-                autoFocus={true}
-                onChangeText={(text)=> setPhoneNumber(text)}
-                defaultValue={phoneNumber}
-                style={styles.inputForm} placeholder='Número telefónico'/>
-                <Text style={styles.modalText}>Direccción</Text> 
+                  autoFocus={true}
+                  onChangeText={(text) => setPhoneNumber(text)}
+                  defaultValue={phoneNumber}
+                  style={styles.inputForm} placeholder='Número telefónico' />
+                <Text style={styles.modalText}>Direccción</Text>
                 <TextInput
-                onChangeText={(text)=> setAddress(text)}
-                defaultValue={address}
-                style={styles.inputForm} placeholder='Dirección'/>
-                <Text style={styles.modalText}>Instrucciones de entrega (opcional)</Text> 
+                  onChangeText={(text) => setAddress(text)}
+                  defaultValue={address}
+                  style={styles.inputForm} placeholder='Dirección' />
+                <Text style={styles.modalText}>Instrucciones de entrega (opcional)</Text>
                 <TextInput
-                onChangeText={(text)=> setInstructions(text)}
-                defaultValue={instructions}
-                style={styles.inputForm} placeholder='Instrucciones de entrega'/>                
+                  onChangeText={(text) => setInstructions(text)}
+                  defaultValue={instructions}
+                  style={styles.inputForm} placeholder='Instrucciones de entrega' />
               </View>
               <View style={styles.btnConfirmOrder}>
-                <TouchableOpacity onPress={()=> handleCheckout()}  >
+                <TouchableOpacity onPress={() => handleCheckout()}  >
                   <Text style={styles.checkoutText}>Confirmar Orden</Text>
                 </TouchableOpacity>
               </View>
-            </View>       
+            </View>
           </View>
         </View>
-     
-    </Modal>
-    
-  )}
+
+      </Modal>
+
+    )
+  }
 
 
 
 
   return (
-    <>    
+    <>
       <View style={styles.container}>
-          <View style={styles.productsListContainer}>
-            {cart ? <ProductsList Children={ProductItemList} products={cart} numColumns={1} />:null}
-          </View>
-          <View style={styles.checkoutContainer}>      
-            <TouchableOpacity onPress={() => setModalVisible(true)} >          
-              <Text style={styles.checkoutText}>Generar orden</Text>        
-            </TouchableOpacity>
-          </View>        
+        <View style={styles.productsListContainer}>
+          {cart ? <ProductsList Children={ProductItemList} products={cart} numColumns={1} /> : null}
+        </View>
+        <View style={styles.checkoutContainer}>
+          <TouchableOpacity onPress={() => setModalVisible(true)} >
+            <Text style={styles.checkoutText}>Generar orden</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <CheckoutModal/>       
-      </>
+      <CheckoutModal />
+    </>
   )
 }
 

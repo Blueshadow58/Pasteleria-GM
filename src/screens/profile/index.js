@@ -1,17 +1,20 @@
-import { Text, View,Image, TouchableOpacity,Button } from 'react-native'
+import { Text, View, Image, TouchableOpacity, Button } from 'react-native'
 import { useState } from 'react';
 import * as ImagePicker from "expo-image-picker";
 import { styles } from './styles'
 import { defaultAuth } from '../../firebase/firebase-config';
 import { updateProfile } from "firebase/auth";
-import { getStorage, ref} from "firebase/storage";
+import { getStorage, ref } from "firebase/storage";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { uploadImageAsync } from '../../firebase/api';
 import { signOutFromActualAccout } from '../../firebase/auth';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setToken } from '../../reduxSlices/authentification/authentificationSlice';
+import Location from './location';
 
-export default function Profile({navigation}) {
+
+
+export default function Profile({ navigation }) {
   const dispatch = useDispatch()
   const currentUser = defaultAuth.currentUser;
   let profileImg = currentUser.photoURL || null;
@@ -42,32 +45,47 @@ export default function Profile({navigation}) {
     const storage = getStorage();
     const storageRef = ref(storage, 'profilePictures');
     //upload the image to firebase storage
-    uploadImageAsync(storageRef,image.assets[0].uri,currentUser.uid).then((url) => {
+    uploadImageAsync(storageRef, image.assets[0].uri, currentUser.uid).then((url) => {
       //set the image url to the state
       setPickedUrl(url);
-        //update the user profile
-        updateProfile(currentUser, {
-          photoURL: url
-        }).catch((error) => {
-          console.log(error);
-        });
+      //update the user profile
+      updateProfile(currentUser, {
+        photoURL: url
+      }).catch((error) => {
+        console.log(error);
+      });
     });
   };
 
 
 
-const Header = () => (
-  <View style={styles.headerContainer}>
-    <View style={styles.headerInner}>
-      {!pickedUrl ? <Image style={styles.img} />
-        : <Image style={styles.img} source={{ uri: pickedUrl }} />}
+  const Header = () => (
+    <View style={styles.headerContainer}>
+      <View style={styles.headerInner}>
+        {!pickedUrl ? <Image style={styles.img} />
+          : <Image style={styles.img} source={{ uri: pickedUrl }} />}
         <TouchableOpacity style={styles.changeImg} onPress={onHandleTakeImage}>
-          <Ionicons style={styles.pencilIcon} name="pencil" />      
-        </TouchableOpacity>      
-      <Text>{currentUser.displayName ? currentUser.displayName: 'no name added'}</Text>          
-    </View> 
-  </View> 
-)
+          <Ionicons style={styles.pencilIcon} name="pencil" />
+        </TouchableOpacity>
+        <Text>{currentUser.displayName ? currentUser.displayName : currentUser.email}</Text>
+      </View>
+    </View>
+  )
+
+
+  // show current position 
+  const Body = () => (
+    <View style={styles.bodyContainer}>
+      <View style={styles.bodyInner}>
+
+
+        <Location />
+
+
+
+      </View>
+    </View>
+  )
 
 
 
@@ -75,18 +93,18 @@ const Header = () => (
   // Render the profile screen 
   return (
     <View style={styles.container}>
-      <Header/>
-        <Button title='Cerrar sesion' onPress={() => {
-          // dispatch(setToken(null))
-          
-          signOutFromActualAccout({navigation})
-          //redirect to login screen form this tab to avoid the user to go back to the profile screen
-          // navigation.navigate('LoginTab',{screen:'Login'}); 
+      <Header />
+      <Body />
 
 
-        }}/>
+      {/* <Button title='Cerrar sesion' onPress={() => {
+        // dispatch(setToken(null))
+        signOutFromActualAccout({ navigation })
+        //redirect to login screen form this tab to avoid the user to go back to the profile screen
+        // navigation.navigate('LoginTab',{screen:'Login'}); 
+      }} /> */}
     </View>
   )
-  
+
 
 }

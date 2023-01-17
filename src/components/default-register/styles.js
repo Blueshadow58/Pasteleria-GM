@@ -3,10 +3,10 @@ import colors from '../../constants/colors'
 
 export const styles = StyleSheet.create({
   container: {
-    
+
     backgroundColor: colors.white,
     width: '80%',
-    alignItems: 'center',    
+    alignItems: 'center',
     paddingVertical: 20,
     flexDirection: 'column',
   },
@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
   icon: {
     color: colors.orange,
     marginRight: 10,
-  },  
+  },
   containerButton: {
     width: '100%',
   },
@@ -45,5 +45,5 @@ export const styles = StyleSheet.create({
     color: colors.white,
     fontWeight: 'bold',
     fontSize: 15,
-  }  
+  }
 })

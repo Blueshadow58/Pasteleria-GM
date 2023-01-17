@@ -66,6 +66,16 @@ function Location() {
             console.log(err);
             Alert.alert('Error', 'No se pudo actualizar la información de envío');
         });
+    }
+
+    const UpdateButtom = ({ child, action }) => {
+        return (
+            <View style={styles.checkoutContainer}>
+                <TouchableOpacity onPress={action}>
+                    <Text style={styles.checkoutText}>{child}</Text>
+                </TouchableOpacity>
+            </View>
+        )
 
     }
 
@@ -97,8 +107,9 @@ function Location() {
                 </View>
             </View>
             <View style={styles.divRow}>
-                {text ? <Button title='Buscar Ubicación' onPress={reverseGeoCode}></Button> : null}
-                {text ? <Button title='Actualizar' onPress={updateShippingInfo}></Button> : null}
+                {text ? <UpdateButtom child='Buscar Ubicación' action={reverseGeoCode} /> : null}
+
+                {text ? <UpdateButtom child='Actualizar' onPress={updateShippingInfo} /> : null}
 
             </View>
 
@@ -132,6 +143,7 @@ function Location() {
 
         </>
     );
+
 }
 
 export default Location

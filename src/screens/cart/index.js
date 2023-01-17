@@ -120,10 +120,8 @@ const Cart = ({ navigation }) => {
         </View>
 
       </Modal>
-
     )
   }
-
 
 
 

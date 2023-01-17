@@ -15,7 +15,6 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-
     },
     img: {
         width: 100,
@@ -98,6 +97,18 @@ export const styles = StyleSheet.create({
         fontSize: 18,
         color: colors.gray,
         marginBottom: 10,
+    },
+    checkoutContainer: {
+        backgroundColor: colors.orange,
+        marginBottom: 20,
+        // marginHorizontal: '10%',
+        borderRadius: 10,
+    },
+    checkoutText: {
+        padding: 5,
+        fontSize: 16,
+        // alignSelf: 'center',
+        color: colors.white,
     },
 
 });

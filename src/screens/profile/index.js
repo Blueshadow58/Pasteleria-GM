@@ -73,6 +73,8 @@ export default function Profile({ navigation }) {
   )
 
 
+
+
   // show current position 
   const Body = () => (
     <View style={styles.bodyContainer}>

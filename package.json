@@ -13,7 +13,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.2.0",
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
     "@fortawesome/react-native-fontawesome": "^0.3.0",
-    "@react-native-async-storage/async-storage": "^1.17.11",
+    "@react-native-async-storage/async-storage": "~1.17.3",
     "@react-native-masked-view/masked-view": "0.2.8",
     "@react-navigation/bottom-tabs": "^6.4.3",
     "@react-navigation/native-stack": "^6.9.2",
@@ -41,7 +41,7 @@
     "expo-updates": "~0.15.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9",
+    "@babel/core": "^7.19.3",
     "@types/react-redux": "^7.1.24",
     "eslint": "^8.29.0",
     "eslint-plugin-react": "^7.31.11"
